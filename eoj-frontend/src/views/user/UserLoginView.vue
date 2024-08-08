@@ -18,9 +18,30 @@
         />
       </a-form-item>
       <a-form-item>
-        <a-button type="primary" html-type="submit" style="width: 120px">
-          登录
-        </a-button>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+          "
+        >
+          <a-button type="primary" html-type="submit" style="width: 120px">
+            登录
+          </a-button>
+          <a-button
+            type="primary"
+            html-type="button"
+            @click="
+              () => {
+                router.push({ path: '/user/register' });
+              }
+            "
+            style="width: 120px"
+          >
+            注册
+          </a-button>
+        </div>
       </a-form-item>
     </a-form>
   </div>
