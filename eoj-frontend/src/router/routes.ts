@@ -74,6 +74,9 @@ export const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "主页",
     component: QuestionsView,
+    meta: {
+      hideInMenu: true,
+    },
   },
   {
     path: "/noAuth",

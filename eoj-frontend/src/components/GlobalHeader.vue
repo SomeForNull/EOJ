@@ -4,6 +4,7 @@
       <a-menu
         mode="horizontal"
         :selected-keys="selectedKeys"
+        default-selected-keys="/questions"
         @menu-item-click="doMenuClick"
       >
         <a-menu-item
@@ -61,7 +62,11 @@ const selectedKeys = ref(["/"]);
 
 // 路由跳转后，更新选中的菜单项
 router.afterEach((to, from, failure) => {
-  selectedKeys.value = [to.path];
+  if ("/" != to.path) {
+    selectedKeys.value = [to.path];
+  } else {
+    selectedKeys.value = ["/questions"];
+  }
 });
 
 console.log();
