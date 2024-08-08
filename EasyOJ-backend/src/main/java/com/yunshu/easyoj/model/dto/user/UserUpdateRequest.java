@@ -1,13 +1,13 @@
 package com.yunshu.easyoj.model.dto.user;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 用户更新请求
  *
- * @author <a href="https://github.com/liyunshu">程序员鱼皮</a>
- * @from <a href="https://yunshu.icu">编程导航知识星球</a>
+
  */
 @Data
 public class UserUpdateRequest implements Serializable {

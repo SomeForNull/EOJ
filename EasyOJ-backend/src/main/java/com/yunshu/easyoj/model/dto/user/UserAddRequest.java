@@ -1,7 +1,8 @@
 package com.yunshu.easyoj.model.dto.user;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 
 @Data

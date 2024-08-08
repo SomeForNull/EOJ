@@ -6,15 +6,15 @@ import com.yunshu.easyoj.model.dto.user.UserQueryRequest;
 import com.yunshu.easyoj.model.entity.User;
 import com.yunshu.easyoj.model.vo.LoginUserVO;
 import com.yunshu.easyoj.model.vo.UserVO;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户服务
  *
- * @author <a href="https://github.com/liyunshu">程序员鱼皮</a>
- * @from <a href="https://yunshu.icu">编程导航知识星球</a>
+
  */
 public interface UserService extends IService<User> {
 
