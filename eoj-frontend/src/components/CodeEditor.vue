@@ -45,11 +45,13 @@ const codeEditor = ref();
 watch(
   () => props.language,
   () => {
-    monaco.editor.setModelLanguage(
-      // 踩坑一定要使用toRaw
-      toRaw(codeEditor.value).getModel(),
-      props.language
-    );
+    if (codeEditor.value) {
+      monaco.editor.setModelLanguage(
+        // 踩坑一定要使用toRaw
+        toRaw(codeEditor.value).getModel(),
+        props.language
+      );
+    }
   }
 );
 
