@@ -42,25 +42,16 @@ const codeEditor = ref();
 //   toRaw(codeEditor.value).setValue("新的值");
 // };
 
-// watch(
-//   () => props.language,
-//   () => {
-//     codeEditor.value = monaco.editor.create(codeEditorRef.value, {
-//       value: props.value,
-//       language: props.language,
-//       automaticLayout: true,
-//       colorDecorators: true,
-//       minimap: {
-//         enabled: true,
-//       },
-//       readOnly: false,
-//       theme: "vs-dark",
-//       // lineNumbers: "off",
-//       // roundedSelection: false,
-//       // scrollBeyondLastLine: false,
-//     });
-//   }
-// );
+watch(
+  () => props.language,
+  () => {
+    monaco.editor.setModelLanguage(
+      // 踩坑一定要使用toRaw
+      toRaw(codeEditor.value).getModel(),
+      props.language
+    );
+  }
+);
 
 onMounted(() => {
   if (!codeEditorRef.value) {
