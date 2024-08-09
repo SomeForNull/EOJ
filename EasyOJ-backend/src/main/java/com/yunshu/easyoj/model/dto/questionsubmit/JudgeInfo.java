@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class JudgeInfo {
     /**
-     * 程序执行信息（ms）
+     * 程序执行信息
      */
     private String message;
     /**
