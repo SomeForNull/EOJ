@@ -22,18 +22,18 @@ public class DockerDemo {
 //        pingCmd.exec();
         // 拉取镜像
         String image = "nginx:latest";
-//        PullImageCmd pullImageCmd = dockerClient.pullImageCmd(image);
-//        PullImageResultCallback pullImageResultCallback = new PullImageResultCallback() {
-//            @Override
-//            public void onNext(PullResponseItem item) {
-//                System.out.println("下载镜像：" + item.getStatus());
-//                super.onNext(item);
-//            }
-//        };
-//        pullImageCmd
-//                .exec(pullImageResultCallback)
-//                .awaitCompletion();
-//        System.out.println("下载完成");
+        PullImageCmd pullImageCmd = dockerClient.pullImageCmd(image);
+        PullImageResultCallback pullImageResultCallback = new PullImageResultCallback() {
+            @Override
+            public void onNext(PullResponseItem item) {
+                System.out.println("下载镜像：" + item.getStatus());
+                super.onNext(item);
+            }
+        };
+        pullImageCmd
+                .exec(pullImageResultCallback)
+                .awaitCompletion();
+        System.out.println("下载完成");
         // 创建容器
         CreateContainerCmd containerCmd = dockerClient.createContainerCmd(image);
         CreateContainerResponse createContainerResponse = containerCmd

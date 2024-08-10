@@ -100,4 +100,4 @@ knife4j:
         api-rule-resources:
           - com.yunshu.easyoj.controller
 codesandbox:
-  type: example
+  type: remote

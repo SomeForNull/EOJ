@@ -47,22 +47,29 @@ public abstract class CodeSandBoxTemplate implements CodeSandbox {
         List<String> inputList = executeCodeRequest.getInputList();
         String code = executeCodeRequest.getCode();
         String language = executeCodeRequest.getLanguage();
+        ExecuteCodeResponse executeCodeResponse=new ExecuteCodeResponse();
         //1.黑名单
         if (checkBlank(code)) return null;
 
-        //2. 把用户的代码保存为文件并编译
+        //2. 把用户的代码保存为文件
         SaveFileResult result = saveFile(code);
 
         //编译代码，得到 class 文件
-        ExecuteCodeResponse re = compileTheCode(result);
-        if (re != null) return re;
-
+        boolean re = compileTheCode(result);
+        if(!re){
+            executeCodeResponse.setStatus(3);
+            executeCodeResponse.setMessage("失败");
+            JudgeInfo judgeInfo = new JudgeInfo();
+            judgeInfo.setMessage("编译失败");
+            executeCodeResponse.setJudgeInfo(judgeInfo);
+            return executeCodeResponse;
+        }
         // 3. 执行代码，得到输出结果
         List<ExecuteMessage> executeMessageList = executeCode(inputList, result);
         if (executeMessageList == null) return null;
 
         //4. 收集整理输出结果
-        ExecuteCodeResponse executeCodeResponse = getExecuteCodeMessage(executeMessageList);
+        executeCodeResponse = getExecuteCodeMessage(executeMessageList);
 
         //5. 文件清理
         cleanFiles(result);
@@ -111,17 +118,19 @@ public abstract class CodeSandBoxTemplate implements CodeSandbox {
      * @param result
      * @return
      */
-    protected ExecuteCodeResponse compileTheCode(SaveFileResult result) {
+    protected Boolean compileTheCode(SaveFileResult result) {
         String compileCmd = String.format("javac -encoding utf-8 %s", result.userCodeFile.getAbsolutePath());
         try {
             Process compileProcess = Runtime.getRuntime().exec(compileCmd);
             ExecuteMessage executeMessage = ProcessUtils.runProcessAndGetMessage(compileProcess, "编译");
-
+            if(StrUtil.isNotBlank(executeMessage.getErrorMessage())){
+                return false;
+            }
             System.out.println(executeMessage);
         } catch (Exception e) {
-            return getErrorResponse(e);
+            return false;
         }
-        return null;
+        return true;
     }
 
     /**
@@ -133,8 +142,8 @@ public abstract class CodeSandBoxTemplate implements CodeSandbox {
     protected  List<ExecuteMessage> executeCode(List<String> inputList, SaveFileResult result) {
         List<ExecuteMessage> executeMessageList = new ArrayList<>();
         for (String inputArgs : inputList) {
-            //String runCmd = String.format("java -Xmx256m -Dfile.encoding=UTF-8 -cp %s Main %s", userCodeParentPath, inputArgs);
-            String runCmd = String.format("java -Xmx256m -Dfile.encoding=UTF-8 -cp %s;%s -Djava.security.manager=%s Main %s", result.userCodeParentPath, SECURITY_MANAGER_PATH, SECURITY_MANAGER_CLASS_NAME, inputArgs);
+            String runCmd = String.format("java -Xmx256m -Dfile.encoding=UTF-8 -cp %s Main %s", result.userCodeParentPath, inputArgs);
+            //String runCmd = String.format("java -Xmx256m -Dfile.encoding=UTF-8 -cp %s;%s -Djava.security.manager=%s Main %s", result.userCodeParentPath, SECURITY_MANAGER_PATH, SECURITY_MANAGER_CLASS_NAME, inputArgs);
             try {
                 Process runProcess = Runtime.getRuntime().exec(runCmd);
                 // 超时控制
@@ -168,6 +177,7 @@ public abstract class CodeSandBoxTemplate implements CodeSandbox {
         List<String> outputList = new ArrayList<>();
         // 取用时最大值，便于判断是否超时
         long maxTime = 0;
+        long maxMemory=0;
         for (ExecuteMessage executeMessage : executeMessageList) {
             String errorMessage = executeMessage.getErrorMessage();
             if (StrUtil.isNotBlank(errorMessage)) {
@@ -178,8 +188,12 @@ public abstract class CodeSandBoxTemplate implements CodeSandbox {
             }
             outputList.add(executeMessage.getMessage());
             Long time = executeMessage.getTime();
+            Long memory=executeMessage.getMemory();
             if (time != null) {
                 maxTime = Math.max(maxTime, time);
+            }
+            if(memory!=null){
+                maxMemory=Math.max(maxMemory,memory);
             }
         }
         // 正常运行完成
@@ -189,9 +203,7 @@ public abstract class CodeSandBoxTemplate implements CodeSandbox {
         executeCodeResponse.setOutputList(outputList);
         JudgeInfo judgeInfo = new JudgeInfo();
         judgeInfo.setTime(maxTime);
-        // 要借助第三方库来获取内存占用，非常麻烦，此处不做实现
-//        judgeInfo.setMemory();
-
+        judgeInfo.setMemory(maxMemory);
         executeCodeResponse.setJudgeInfo(judgeInfo);
         return executeCodeResponse;
     }

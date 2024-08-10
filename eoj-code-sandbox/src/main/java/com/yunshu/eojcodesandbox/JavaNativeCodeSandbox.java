@@ -4,10 +4,11 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import com.yunshu.eojcodesandbox.model.ExecuteCodeRequest;
 import com.yunshu.eojcodesandbox.model.ExecuteCodeResponse;
 import com.yunshu.eojcodesandbox.template.CodeSandBoxTemplate;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-
+@Component
 public class JavaNativeCodeSandbox extends CodeSandBoxTemplate {
     @Override
     protected boolean checkBlank(String code) {
