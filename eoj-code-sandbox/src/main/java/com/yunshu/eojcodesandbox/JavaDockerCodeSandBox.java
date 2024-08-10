@@ -128,15 +128,17 @@ public class JavaDockerCodeSandBox extends CodeSandBoxTemplate {
             // 判断是否超时
             final boolean[] timeout = {true};
             String execId = execCreateCmdResponse.getId();
+            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilderError = new StringBuilder();
             ExecStartResultCallback execStartResultCallback = new ExecStartResultCallback() {
                 @Override
                 public void onNext(Frame frame) {
                     StreamType streamType = frame.getStreamType();
                     if (StreamType.STDERR.equals(streamType)) {
-                        errorMessage[0] = new String(frame.getPayload());
+                        errorMessage[0] = stringBuilderError.append(new String(frame.getPayload())).toString();
                         System.out.println("输出错误结果：" + errorMessage[0]);
                     } else {
-                        message[0] = new String(frame.getPayload());
+                        message[0] = stringBuilder.append(new String(frame.getPayload())).toString();
                         if (message[0].endsWith("\n")) {
                             message[0] = message[0].substring(0, message[0].length() - 1);
                         }
