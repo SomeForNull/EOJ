@@ -9,6 +9,7 @@ import com.yunshu.easyoj.model.enums.JudgeInfoMessageEnum;
 
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 默认判题策略
@@ -25,7 +26,9 @@ public class DefaultJudgeStrategy implements JudgeStrategy {
     public JudgeInfo doJudge(JudgeContext judgeContext) {
         JudgeInfo judgeInfo = judgeContext.getJudgeInfo();
         Long memory = judgeInfo.getMemory();
+        Optional.ofNullable(memory).orElse(0L);
         Long time = judgeInfo.getTime();
+        Optional.ofNullable(time).orElse(0L);
         List<String> inputList = judgeContext.getInputList();
         List<String> outputList = judgeContext.getOutputList();
         Question question = judgeContext.getQuestion();
