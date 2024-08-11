@@ -1,0 +1,13 @@
+package com.yunshu.eojbackendgateway;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class EojBackendGatewayApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EojBackendGatewayApplication.class, args);
+    }
+
+}

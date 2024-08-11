@@ -24,7 +24,11 @@
     </a-col>
     <a-col flex="100px">
       <div>
-        {{ store.state.user?.loginUser?.userName ?? "未登录" }}
+        <RouterLink
+          :to="store.state.user?.loginUser?.userName ? '/' : '/user/login'"
+        >
+          {{ store.state.user?.loginUser?.userName ?? "未登录" }}
+        </RouterLink>
       </div>
     </a-col>
   </a-row>
