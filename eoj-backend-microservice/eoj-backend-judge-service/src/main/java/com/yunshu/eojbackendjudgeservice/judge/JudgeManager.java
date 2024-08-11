@@ -25,9 +25,9 @@ public class JudgeManager {
         QuestionSubmit questionSubmit = judgeContext.getQuestionSubmit();
         String language = questionSubmit.getLanguage();
         JudgeStrategy judgeStrategy = new DefaultJudgeStrategy();
-        if ("java".equals(language)) {
-            judgeStrategy = new JavaLanguageJudgeStrategy();
-        }
+//        if ("java".equals(language)) {
+//            judgeStrategy = new JavaLanguageJudgeStrategy();
+//        }
         return judgeStrategy.doJudge(judgeContext);
     }
 

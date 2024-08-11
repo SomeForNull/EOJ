@@ -174,13 +174,18 @@ public class QuestionController {
      */
     @GetMapping("/get")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<User> getUserById(long id, HttpServletRequest request) {
+    public BaseResponse<Question> getQuestionById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User user = userService.getById(id);
-        ThrowUtils.throwIf(user == null, ErrorCode.NOT_FOUND_ERROR);
-        return ResultUtils.success(user);
+        User user = userService.getLoginUser(request);
+        // 仅本人或管理员可删除
+        if (user==null||!userService.isAdmin(user)) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+        Question question = questionService.getById(id);
+        ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
+        return ResultUtils.success(question);
     }
 
 

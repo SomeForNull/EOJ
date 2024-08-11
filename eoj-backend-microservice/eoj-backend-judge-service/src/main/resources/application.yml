@@ -37,7 +37,11 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
-
+  rabbitmq:
+    host: 192.168.139.128
+    port: 5672
+    username: yunshu
+    password: 20220822
 server:
   address: 0.0.0.0
   port: 8104
@@ -47,6 +51,7 @@ server:
     session:
       cookie:
         max-age: 2592000
+        path: /api
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
@@ -58,3 +63,5 @@ mybatis-plus:
       logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
 codesandbox:
   type: remote
+knife4j:
+  enable: true

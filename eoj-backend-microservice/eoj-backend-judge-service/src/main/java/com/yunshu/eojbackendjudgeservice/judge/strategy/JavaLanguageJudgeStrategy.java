@@ -9,6 +9,7 @@ import com.yunshu.eojbackendmodel.model.entity.Question;
 import com.yunshu.eojbackendmodel.model.enums.JudgeInfoMessageEnum;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Java 程序的判题策略
@@ -24,7 +25,9 @@ public class JavaLanguageJudgeStrategy implements JudgeStrategy {
     public JudgeInfo doJudge(JudgeContext judgeContext) {
         JudgeInfo judgeInfo = judgeContext.getJudgeInfo();
         Long memory = judgeInfo.getMemory();
+        memory=Optional.ofNullable(memory).orElse(0L);
         Long time = judgeInfo.getTime();
+         time = Optional.ofNullable(time).orElse(0L);
         List<String> inputList = judgeContext.getInputList();
         List<String> outputList = judgeContext.getOutputList();
         Question question = judgeContext.getQuestion();
