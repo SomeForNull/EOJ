@@ -16,7 +16,7 @@ import com.yunshu.eojbackendmodel.model.vo.QuestionVO;
 import com.yunshu.eojbackendmodel.model.vo.UserVO;
 import com.yunshu.eojbackendquestionservice.mapper.QuestionMapper;
 import com.yunshu.eojbackendquestionservice.service.QuestionService;
-import com.yunshu.eojbackendserviceclient.service.UserService;
+import com.yunshu.eojbackendserviceclient.service.UserFeignClient;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +35,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userService;
 
     /**
      * 校验题目是否合法

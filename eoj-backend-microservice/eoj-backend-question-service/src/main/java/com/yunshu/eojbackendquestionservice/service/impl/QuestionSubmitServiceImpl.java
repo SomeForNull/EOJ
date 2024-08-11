@@ -18,8 +18,8 @@ import com.yunshu.eojbackendmodel.model.vo.QuestionSubmitVO;
 import com.yunshu.eojbackendquestionservice.mapper.QuestionSubmitMapper;
 import com.yunshu.eojbackendquestionservice.service.QuestionService;
 import com.yunshu.eojbackendquestionservice.service.QuestionSubmitService;
-import com.yunshu.eojbackendserviceclient.service.JudgeService;
-import com.yunshu.eojbackendserviceclient.service.UserService;
+import com.yunshu.eojbackendserviceclient.service.JudgeFeignClient;
+import com.yunshu.eojbackendserviceclient.service.UserFeignClient;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -44,11 +44,11 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     private QuestionService questionService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userService;
 
     @Resource
     @Lazy
-    private JudgeService judgeService;
+    private JudgeFeignClient judgeService;
 
     /**
      * 提交题目

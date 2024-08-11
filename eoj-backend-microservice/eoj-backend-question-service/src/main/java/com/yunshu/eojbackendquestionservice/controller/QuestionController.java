@@ -20,7 +20,7 @@ import com.yunshu.eojbackendmodel.model.vo.QuestionSubmitVO;
 import com.yunshu.eojbackendmodel.model.vo.QuestionVO;
 import com.yunshu.eojbackendquestionservice.service.QuestionService;
 import com.yunshu.eojbackendquestionservice.service.QuestionSubmitService;
-import com.yunshu.eojbackendserviceclient.service.UserService;
+import com.yunshu.eojbackendserviceclient.service.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ import java.util.List;
  * 题目接口
  */
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/")
 @Slf4j
 public class QuestionController {
 
@@ -41,7 +41,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userService;
 
     @Resource
     private QuestionSubmitService questionSubmitService;
@@ -104,7 +104,7 @@ public class QuestionController {
         Question oldQuestion = questionService.getById(id);
         ThrowUtils.throwIf(oldQuestion == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        if (!oldQuestion.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
+        if (!oldQuestion.getUserId().equals(user.getId()) && !userService.isAdmin(user)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         boolean b = questionService.removeById(id);
