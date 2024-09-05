@@ -33,6 +33,24 @@
       }"
       @page-change="onPageChange"
     >
+      <template #result="{ record }">
+        {{ record.judgeInfo.message }}
+      </template>
+      <template #memory="{ record }">
+        {{
+          record.judgeInfo.memory == 0
+            ? "0"
+            : (record.judgeInfo.memory / 1024 / 1024).toFixed(2)
+        }}
+      </template>
+      <template #time="{ record }">
+        {{ record.judgeInfo.time }}
+      </template>
+      <template #status="{ record }">
+        <ATag :color="getStatusColor(record.status)"
+          >{{ getStatusText(record.status) }}
+        </ATag>
+      </template>
       <template #judgeInfo="{ record }">
         {{ JSON.stringify(record.judgeInfo) }}
       </template>
@@ -105,12 +123,21 @@ const columns = [
     dataIndex: "language",
   },
   {
-    title: "判题信息",
-    slotName: "judgeInfo",
+    title: "结果",
+    slotName: "result",
+  },
+  {
+    title: "内存消耗(mb)",
+    slotName: "memory",
+  },
+  {
+    title: "运行时间(ms)",
+    slotName: "time",
   },
   {
     title: "判题状态",
     dataIndex: "status",
+    slotName: "status",
   },
   {
     title: "题目 id",
@@ -125,6 +152,41 @@ const columns = [
     slotName: "createTime",
   },
 ];
+
+// 定义响应数据的类型
+interface JudgeInfoMessageEnum {
+  message: string;
+  memory: string;
+  time: string;
+}
+
+const StatusEnum = {
+  WAITING: { text: "等待中", value: 0 },
+  RUNNING: { text: "判题中", value: 1 },
+  SUCCEED: { text: "成功", value: 2 },
+  FAILED: { text: "失败", value: 3 },
+};
+
+function getStatusColor(value: number) {
+  const statusColor = Object.values(StatusColorEnum).find(
+    (status) => status.value === value
+  );
+  return statusColor ? statusColor.color : "white";
+}
+
+const StatusColorEnum = {
+  WAITING: { color: "yellow", value: 0 },
+  RUNNING: { color: "blue", value: 1 },
+  SUCCEED: { color: "green", value: 2 },
+  FAILED: { color: "red", value: 3 },
+};
+
+function getStatusText(value: number) {
+  const status = Object.values(StatusEnum).find(
+    (status) => status.value === value
+  );
+  return status ? status.text : "未知状态";
+}
 
 const onPageChange = (page: number) => {
   searchParams.value = {

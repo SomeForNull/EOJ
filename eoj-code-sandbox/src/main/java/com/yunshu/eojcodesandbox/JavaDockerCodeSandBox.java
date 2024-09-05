@@ -86,8 +86,6 @@ public class JavaDockerCodeSandBox extends CodeSandBoxTemplate {
         hostConfig.withCpuCount(1L);
         String profileConfig = ResourceUtil.readUtf8Str("seccomp.json");
         hostConfig.withSecurityOpts(Arrays.asList("seccomp=" + profileConfig));
-
-
         CreateContainerResponse createContainerResponse = containerCmd
                 .withHostConfig(hostConfig)
                 .withNetworkDisabled(true)
